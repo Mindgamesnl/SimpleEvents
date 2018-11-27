@@ -1,5 +1,21 @@
-# SimpleEvents
+# SimpleEvents [![Build Status](https://travis-ci.org/Mindgamesnl/SimpleEvents.svg?branch=master)](https://travis-ci.org/Mindgamesnl/SimpleEvents) [![](https://jitpack.io/v/Mindgamesnl/SimpleEvents.svg)](https://jitpack.io/#Mindgamesnl/SimpleEvents)
 Simple events is a tiny java library to add a simple event system to your projects. Nothing big, nothing special. A small module for big projects.
+
+## Maven
+```xml
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+<dependency>
+    <groupId>com.github.Mindgamesnl</groupId>
+    <artifactId>SimpleEvents</artifactId>
+    <version>LATEST</version>
+</dependency>
+
+```
 
 ## Example code
 Step 1, create your event.
