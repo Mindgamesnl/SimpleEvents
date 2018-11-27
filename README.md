@@ -47,6 +47,25 @@ simpleEvents.registerEvent(MyCoolEvent.class).onExecute(event -> {
 });
 ```
 
+you can also register multiple listeners at once via an interface/class
+```java
+simpleEvents.registerListener(new Listener() {
+    
+    @SimpleEvent
+    public void onTwo(TestEventTwo eventTwo) {
+        System.out.println("Event two has value " + eventTwo.getTest());
+    }
+
+
+    @SimpleEvent
+    public void onTwoPartTwo(TestEventOne eventTwo) {
+        System.out.println("Event trhee has value " + eventTwo.getB());
+    }
+
+});
+
+```
+
 and trigger it later with
 ```java
 simpleEvents.triggerEvent(new MyCoolEvent("i am an event hi there!"));

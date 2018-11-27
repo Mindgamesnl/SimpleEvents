@@ -1,9 +1,14 @@
 package com.craftmend.simpleevents;
 
 import com.craftmend.simpleevents.abstracts.AbstractEvent;
+import com.craftmend.simpleevents.annotations.SimpleEvent;
 import com.craftmend.simpleevents.executors.EventExecutor;
+import com.craftmend.simpleevents.interfaces.Listener;
+
 import lombok.NoArgsConstructor;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,6 +52,40 @@ public class SimpleEvents {
 
         //get all executors, and pass them the payload
         executorMap.get(event.getClass().getName()).forEach(eventExecutor -> eventExecutor.run(event));
+    }
+
+
+    /**
+     * Register a method from a class as a listener
+     *
+     * @param method
+     */
+    private void registerMethod(Method method, Listener listener) {
+        if (method.getParameterTypes()[0].isAssignableFrom(AbstractEvent.class)) throw new IllegalArgumentException("Argument with EventHandler interface must be instance of AbstractEvent");
+        registerEvent((Class) method.getParameterTypes()[0]).onExecute(payload -> {
+            try {
+                method.invoke(listener, payload);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+
+    /**
+     * Register all events in a listener
+     *
+     * @param listener
+     */
+    public void registerListener(Listener listener) {
+        Method[] methods = listener.getClass().getMethods();
+        for (Method method : methods) {
+            if (method.isAnnotationPresent(SimpleEvent.class)) {
+                registerMethod(method, listener);
+            }
+        }
     }
 
 }
