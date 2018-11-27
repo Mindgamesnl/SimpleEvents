@@ -19,7 +19,6 @@ public class SimpleEvents {
 
     private Map<String, List<EventExecutor>> executorMap = new HashMap<>();
 
-
     /**
      * Generate EventExecutor with AbstractEvent primitive Type
      * And register it
@@ -61,13 +60,15 @@ public class SimpleEvents {
      * @param method
      */
     private void registerMethod(Method method, Listener listener) {
+        //the argument is not an instance of AbstractEvent so we should not add it, we should throw an exception
         if (method.getParameterTypes()[0].isAssignableFrom(AbstractEvent.class)) throw new IllegalArgumentException("Argument with EventHandler interface must be instance of AbstractEvent");
+
+        //register it by class
         registerEvent((Class) method.getParameterTypes()[0]).onExecute(payload -> {
             try {
+                //invoke the Method, with the payload class and the parent object
                 method.invoke(listener, payload);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
+            } catch (IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
             }
         });
@@ -81,11 +82,10 @@ public class SimpleEvents {
      */
     public void registerListener(Listener listener) {
         Method[] methods = listener.getClass().getMethods();
-        for (Method method : methods) {
-            if (method.isAnnotationPresent(SimpleEvent.class)) {
-                registerMethod(method, listener);
-            }
-        }
+
+        //loop for all methods that have the annotation of @SimpleEvent
+        for (Method method : methods)
+            if (method.isAnnotationPresent(SimpleEvent.class)) registerMethod(method, listener);
     }
 
 }
