@@ -14,6 +14,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * SimpleEvents by Mindgamesnl, version 1.0.
+ *
+ * Github: https://github.com/Mindgamesnl/SimpleEvents
+ */
+
 @NoArgsConstructor
 public class SimpleEvents {
 
