@@ -9,10 +9,8 @@ import lombok.NoArgsConstructor;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * SimpleEvents by Mindgamesnl, version 1.0.
@@ -66,9 +64,6 @@ public class SimpleEvents {
      * @param method
      */
     private void registerMethod(Method method, Listener listener) {
-        //the argument is not an instance of AbstractEvent so we should not add it, we should throw an exception
-        if (method.getParameterTypes()[0].isAssignableFrom(AbstractEvent.class)) throw new IllegalArgumentException("Argument with EventHandler interface must be instance of AbstractEvent");
-
         //register it by class
         registerEvent((Class) method.getParameterTypes()[0]).onExecute(payload -> {
             try {
@@ -90,8 +85,11 @@ public class SimpleEvents {
         Method[] methods = listener.getClass().getMethods();
 
         //loop for all methods that have the annotation of @SimpleEvent
-        for (Method method : methods)
-            if (method.isAnnotationPresent(SimpleEvent.class)) registerMethod(method, listener);
+        Arrays.stream(methods)
+                .filter(method -> method.isAnnotationPresent(SimpleEvent.class))
+                .filter(method -> !method.getParameterTypes()[0].isAssignableFrom(AbstractEvent.class))
+                .collect(Collectors.toList())
+                .forEach(method -> registerMethod(method, listener));
     }
 
 }
