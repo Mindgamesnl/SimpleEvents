@@ -1,3 +1,10 @@
 package com.craftmend.simpleevents.abstracts;
 
-public abstract class AbstractEvent {}
+import lombok.Data;
+
+@Data
+public abstract class AbstractEvent {
+
+    private boolean cancelled = false;
+
+}
