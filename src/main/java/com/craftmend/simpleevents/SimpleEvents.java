@@ -81,6 +81,7 @@ public class SimpleEvents {
      */
     private void registerMethod(Method method, Listener listener, EventPriority priority, boolean ignoresCancelled) {
         //register it by class
+        method.setAccessible(true);
         registerEvent((Class) method.getParameterTypes()[0],
                 priority,
                 ignoresCancelled)
